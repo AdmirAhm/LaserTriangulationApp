@@ -181,7 +181,7 @@ public:
     }
 
     void showSelectFolderDialog() {
-        gui::SelectFolderDialog::show(this->getParentWindow(), "Kalibracija", 2);
+        gui::SelectFolderDialog::show(this, "Kalibracija", 2);
     }
 
     void setPath(td::String str) {
@@ -250,5 +250,18 @@ public:
 
         cv::Mat R;
         cv::Rodrigues(rvecs[0], R);
+    }
+    bool onClick(gui::FileDialog* pFD, td::UINT4 dlgID) override
+    {
+        if (dlgID == 2)
+        {
+            td::String pathp = pFD->getFileName();
+            std::string path = pathp.c_str();
+            if (path != "") {
+                _put.setValue(pathp);
+            }
+            return true;
+        }
+        return false;
     }
 };

@@ -4,6 +4,8 @@ file(GLOB PROJEKAT_SOURCES  ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
 file(GLOB PROJEKAT_INCS  ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 file(GLOB PROJEKAT_SHADERS  ${CMAKE_CURRENT_LIST_DIR}/res/shaders/*)
 set(PROJEKAT_PLIST  ${CMAKE_CURRENT_LIST_DIR}/src/Info.plist)
+set(UEYE_INCLUDE_DIR "C:/Program Files/IDS/uEye/Develop/include")
+set(UEYE_LIB_DIR "C:/Program Files/IDS/uEye/Develop/lib")
 
 # add executable
 add_executable(${PROJEKAT_NAME} ${PROJEKAT_INCS} ${PROJEKAT_SOURCES}  ${PROJEKAT_SHADERS})
@@ -15,7 +17,8 @@ source_group("shaders"        	FILES ${PROJEKAT_SHADERS})
 # za OpenCV
 find_package( OpenCV REQUIRED )
 include_directories(${OpenCV_INCLUDE_DIRS})
-
+include_directories(${UEYE_INCLUDE_DIR})
+link_directories(${UEYE_LIB_DIR})
 
 target_link_libraries(${PROJEKAT_NAME} 	
 							debug ${MU_LIB_DEBUG}			optimized ${MU_LIB_RELEASE}  
@@ -23,6 +26,7 @@ target_link_libraries(${PROJEKAT_NAME}
 							debug ${DP_LIB_DEBUG} 			optimized ${DP_LIB_RELEASE} 
 							debug ${NATGL_LIB_DEBUG} 		optimized ${NATGL_LIB_RELEASE}
 							${OpenCV_LIBS}
+							"${UEYE_LIB_DIR}/uEye_api_64.lib"
 							)
 
 addOpenGLLibraries(${PROJEKAT_NAME})
