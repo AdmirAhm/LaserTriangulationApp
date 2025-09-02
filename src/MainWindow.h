@@ -7,6 +7,7 @@
 #include "MenuBar.h"
 #include "ViewTestGL2.h"
 #include "ToolBar.h";
+#include "DynTabView.h"
 
 class MainWindow : public gui::Window
 {
@@ -14,7 +15,7 @@ private:
 protected:
     ToolBar _mainToolBar;
     MenuBar _mainMenuBar;
-    ViewTestGL2 _viewTestGL2;
+    DynTabView view;
 public:
     MainWindow()
     : gui::Window(gui::Geometry(50, 50, 1200, 600))
@@ -23,6 +24,6 @@ public:
         _mainToolBar.setIconSize(gui::ToolBar::IconSize::Regular);
         setToolBar(_mainToolBar);
         _mainMenuBar.setAsMain(this);
-        setCentralView(&_viewTestGL2);
+        setCentralView(&view);
     }
 };

@@ -9,6 +9,8 @@
 		<Res id="laser" path=":slike/laser.png"/>
 		<Res id="scatter" path=":slike/scatter.png"/>
 		<Res id="target" path=":slike/target.png"/>
+		<Res id="ETF" path="Work/Common/Icons/UNSA/ETF_Logo.png"/>
+		<Res id="UNSA" path="Work/Common/Icons/UNSA/UNSA_Logo.png"/>
 
 	</Images>
 	<Symbols>

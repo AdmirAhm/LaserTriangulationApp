@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 
 set(SOLUTION_NAME LaserTriangulation)	#Unijeti naziv solution-a
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 #BEGIN dio koji ide u sve solutions
 project(${SOLUTION_NAME})
 set(SOURCE_ROOT ${CMAKE_CURRENT_LIST_DIR})
@@ -13,8 +16,10 @@ set(WORK_ROOT ${HOME_ROOT}/Work)
 include(${WORK_ROOT}/DevEnv/Common.cmake) 
 #END dio koji ide u sve solutions
 
-include(${WORK_ROOT}/DevEnv/DataProvider.cmake)
 include(${WORK_ROOT}/DevEnv/natGUI.cmake)
+include(${WORK_ROOT}/DevEnv/DataProvider.cmake)
 include(${WORK_ROOT}/DevEnv/natGL.cmake)
 
 include(LaserTriangulation.cmake)
+
+
