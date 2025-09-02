@@ -52,25 +52,22 @@ protected:
     gui::Label _cxlbl;
     gui::Label _cylbl;
     gui::Label _distlbl;
-    gui::Label _alphalbl;
 
     gui::NumericEdit _fx;
     gui::NumericEdit _fy;
     gui::NumericEdit _cx;
     gui::NumericEdit _cy;
-    gui::NumericEdit _alpha;
     gui::NumericEdit _dist1;
     gui::NumericEdit _dist2;
     gui::NumericEdit _dist3;
     gui::NumericEdit _dist4;
     gui::NumericEdit _dist5;
 
-    cv::Mat cameraMatrix;
-    cv::Mat dist;
-    double angle;
+    cv::Mat* cameraMatrix;
+    cv::Mat* dist;
 public:
-    ViewCalib()
-    : _gl(14, 2)
+    ViewCalib(cv::Mat *cam, cv::Mat *dis)
+    : _gl(13, 2)
     , _vl(4)
     , _autolbl("Automatska Kalibracija:")
     , _poljelbl("Dimenzije Polja:")
@@ -89,12 +86,10 @@ public:
     , _cxlbl("Cx=")
     , _fylbl("Fy=")
     , _cylbl("Cy=")
-    , _alphalbl("alpha=")
     , _fx(td::real8)
     , _fy(td::real8)
     , _cx(td::real8)
     , _cy(td::real8)
-    , _alpha(td::real8)
     , _hlbtn(3)
     , _hldist(6)
     , _dist1(td::real8)
@@ -104,6 +99,8 @@ public:
     , _dist5(td::real8)
     , _distlbl("Distorzijski koeficijenti:")
     {
+        cameraMatrix = cam;
+        dist = dis;
         _browse.setType(gui::Button::Type::Default);
 
         gc.appendRow(_autolbl, 2, td::HAlignment::Center);
@@ -125,8 +122,7 @@ public:
         gc.appendCol(_cx);
         gc.appendRow(_cylbl, td::HAlignment::Right);
         gc.appendCol(_cy);
-        gc.appendRow(_alphalbl, td::HAlignment::Right);
-        gc.appendCol(_alpha);
+
 
         _hlbtn.appendSpacer();
         _hlbtn.append(_auto);
@@ -162,11 +158,11 @@ public:
             double fy = _fy.getValue().r8Val();
             double cx = _cx.getValue().r8Val();
             double cy = _cy.getValue().r8Val();
-            cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
-            cameraMatrix.at<double>(0, 0) = fx;
-            cameraMatrix.at<double>(1, 1) = fy;
-            cameraMatrix.at<double>(0, 2) = cx;
-            cameraMatrix.at<double>(1, 2) = cy;
+            *cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
+            cameraMatrix->at<double>(0, 0) = fx;
+            cameraMatrix->at<double>(1, 1) = fy;
+            cameraMatrix->at<double>(0, 2) = cx;
+            cameraMatrix->at<double>(1, 2) = cy;
 
             double dist1=_dist1.getValue().r8Val();
             double dist2=_dist2.getValue().r8Val();
@@ -174,13 +170,12 @@ public:
             double dist4=_dist4.getValue().r8Val();
             double dist5=_dist5.getValue().r8Val();
 
-            dist.at<double>(0, 0)=dist1;
-            dist.at<double>(1, 0)=dist2;
-            dist.at<double>(2, 0)=dist3;
-            dist.at<double>(3, 0)=dist4;
-            dist.at<double>(4, 0)=dist5;
+            dist->at<double>(0, 0)=dist1;
+            dist->at<double>(1, 0)=dist2;
+            dist->at<double>(2, 0)=dist3;
+            dist->at<double>(3, 0)=dist4;
+            dist->at<double>(4, 0)=dist5;
 
-            angle = _alpha.getValue().r8Val();
         }
         return false;
     }
@@ -233,29 +228,27 @@ public:
         }
         int BR_SLIKA = slike.size();
         std::vector<cv::Mat> rvecs, tvecs;
-        dist = cv::Mat::zeros(5, 1, CV_64F);
+        *dist = cv::Mat::zeros(5, 1, CV_64F);
 
         std::vector<std::vector<cv::Point3f> >objects(BR_SLIKA, obj);
 
-        double error = cv::calibrateCamera(objects, corners, slike[0].size(), cameraMatrix, dist, rvecs, tvecs);
+        double error = cv::calibrateCamera(objects, corners, slike[0].size(), *cameraMatrix, *dist, rvecs, tvecs);
         for (int i = 0; i < BR_SLIKA; i++) {
-            cv::solvePnP(objects[i], corners[i], cameraMatrix, dist, rvecs[i], tvecs[i], false, cv::SOLVEPNP_ITERATIVE);
+            cv::solvePnP(objects[i], corners[i], *cameraMatrix, *dist, rvecs[i], tvecs[i], false, cv::SOLVEPNP_ITERATIVE);
         }
 
-        _fx.setValue(cameraMatrix.at<double>(0, 0));
-        _fy.setValue(cameraMatrix.at<double>(1, 1));
-        _cx.setValue(cameraMatrix.at<double>(0, 2));
-        _cy.setValue(cameraMatrix.at<double>(1, 2));
+        _fx.setValue(cameraMatrix->at<double>(0, 0));
+        _fy.setValue(cameraMatrix->at<double>(1, 1));
+        _cx.setValue(cameraMatrix->at<double>(0, 2));
+        _cy.setValue(cameraMatrix->at<double>(1, 2));
 
-        _dist1.setValue(dist.at<double>(0, 0));
-        _dist2.setValue(dist.at<double>(1, 0));
-        _dist3.setValue(dist.at<double>(2, 0));
-        _dist4.setValue(dist.at<double>(3, 0));
-        _dist5.setValue(dist.at<double>(4, 0));
+        _dist1.setValue(dist->at<double>(0, 0));
+        _dist2.setValue(dist->at<double>(1, 0));
+        _dist3.setValue(dist->at<double>(2, 0));
+        _dist4.setValue(dist->at<double>(3, 0));
+        _dist5.setValue(dist->at<double>(4, 0));
 
         cv::Mat R;
         cv::Rodrigues(rvecs[0], R);
-        angle = 180.0 / CV_PI * std::asin(-R.at<double>(2, 0));
-        _alpha.setValue(angle);
     }
 };
