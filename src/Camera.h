@@ -90,6 +90,7 @@ void camera() {
 
 
 	}
+	cv::destroyWindow("uEye Camera");
 	is_StopLiveVideo(hcam, IS_FORCE_VIDEO_STOP);
 	is_FreeImageMem(hcam, pMem, memId);
 	is_ExitCamera(hcam);

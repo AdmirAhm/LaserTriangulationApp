@@ -29,13 +29,13 @@ public:
     , _height(":height")
     {
         //showLabels(false);
-        addItem(tr("Kalibracija"), &_target, tr(""), 20, 0, 0, 10);
-        addItem(tr("Slikanje"), &_camera, tr(""), 20, 0, 0, 20);
-        addItem(tr("Visina tacke"), &_height, tr(""), 20, 0, 0, 30);
-        addItem(tr("Pronalazak linije"), &_laser, tr(""), 20, 0, 0, 40);
-        addItem(tr("Visina linije"), &_scatter, tr(""), 20, 0, 0, 50);
-        addItem(tr("2D prikaz"), &_2d, tr(""), 20, 0, 0, 60);
-        addItem(tr("3D prikaz"), &_3d, tr(""), 20, 0, 0, 70);
+        addItem(tr("Calibration"), &_target, tr(""), 20, 0, 0, 10);
+        addItem(tr("Camera"), &_camera, tr(""), 20, 0, 0, 20);
+        addItem(tr("PointHeight"), &_height, tr(""), 20, 0, 0, 30);
+        addItem(tr("LineDetection"), &_laser, tr(""), 20, 0, 0, 40);
+        addItem(tr("LineHeight"), &_scatter, tr(""), 20, 0, 0, 50);
+        addItem(tr("2D"), &_2d, tr(""), 20, 0, 0, 60);
+        addItem(tr("3D"), &_3d, tr(""), 20, 0, 0, 70);
     }
     
     void forwardMessagesTo(gui::IMessageConsumer* pConsumer)

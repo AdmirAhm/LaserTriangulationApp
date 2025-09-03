@@ -60,7 +60,7 @@ protected:
             switch (actionID) {
             case 10:
                 pv = new ViewCalib(&cameraMatrix, &dist, &r, &t);
-                _view.addView(pv, tr("Kalibracija"), &_target);
+                _view.addView(pv, tr("Calibration"), &_target);
                 return true;
                 break;
             case 20:

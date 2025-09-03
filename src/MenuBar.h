@@ -14,13 +14,13 @@ protected:
     void populateSubToolsMenu()
     {
         auto& items = subTools.getItems();
-        items[0].initAsActionItem(tr("Kalibracija"), 10);
-        items[1].initAsActionItem(tr("Slikanje"), 20);
-        items[2].initAsActionItem(tr("Visina tacke"), 30);
-        items[3].initAsActionItem(tr("Pronalazak linije"), 40);
-        items[4].initAsActionItem(tr("Visina linije"), 50);
-        items[5].initAsActionItem(tr("2D prikaz"), 60);
-        items[6].initAsActionItem(tr("3D prikaz"), 70);
+        items[0].initAsActionItem(tr("Calibration"), 10);
+        items[1].initAsActionItem(tr("Camera"), 20);
+        items[2].initAsActionItem(tr("PointHeight"), 30);
+        items[3].initAsActionItem(tr("LineDetection"), 40);
+        items[4].initAsActionItem(tr("LineHeight"), 50);
+        items[5].initAsActionItem(tr("2D"), 60);
+        items[6].initAsActionItem(tr("3D"), 70);
         //tems[1] is separator
     }
     void populateSubAppMenu()
