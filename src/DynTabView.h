@@ -16,6 +16,6 @@ public:
 	: gui::TabView(gui::TabHeader::Type::FitToText, 8, 64)
     {
 		setBackgroundView(&_backgroundView);
-    }
+	}
 
 };

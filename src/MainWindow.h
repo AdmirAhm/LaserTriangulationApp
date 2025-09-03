@@ -14,6 +14,7 @@
 #include "FindLine.h"
 #include "LaserHeight.h"
 #include <gui/FileDialog.h>
+#include  "View2D.h";
 class MainWindow : public gui::Window
 {
 private:
@@ -61,7 +62,6 @@ protected:
             case 10:
                 pv = new ViewCalib(&cameraMatrix, &dist, &r, &t);
                 _view.addView(pv, tr("Calibration"), &_target);
-                return true;
                 break;
             case 20:
                 camera();
@@ -75,9 +75,36 @@ protected:
             case 50:
                 gui::SelectFolderDialog::show(this, "LaserHeight", 50);
                 break;
+            case 60:
+                gui::OpenFileDialog::show(this, "2D", { {tr("XML file"),"*.xml"} }, 60);
+                //pv2d = new View2D;
+                //_view.addView(pv2d, tr("2D"), &_2d);
+                break;
             }
+            return true;
         }
         return false;
+    }
+
+    std::vector<cv::Point3f> readPoints(std::string path) {
+        std::vector<cv::Point3f> pts;
+        xml::FileParser parser;
+        if (!parser.parseFile((td::String)path)) {
+            return pts;
+        }
+        auto root = parser.getRootNode();
+        if (root->getName().cCompare("Points") != 0) return pts;
+        auto param = root.getChildNode("Point");
+        while (param.isOk()) {
+            double x, y, z;
+            param.getAttribValue("X", x);
+            param.getAttribValue("Y", y);
+            param.getAttribValue("Z", z);
+            cv::Point3f pom(x, y, z);
+            pts.push_back(pom);
+            ++param;
+        }
+        return pts;
     }
 
     bool onClick(gui::FileDialog* pFD, td::UINT4 dlgID) override
@@ -112,6 +139,20 @@ protected:
                 cv::Mat R;
                 cv::Rodrigues(r, R);
                 LaserHeight(path, cameraMatrix, dist, R, t);
+                return true;
+            }
+            return true;
+        }
+
+        if (dlgID == 60)
+        {
+            td::String pathp = pFD->getFileName();
+            std::string path = pathp.c_str();
+            if (path != "") {
+                auto pts = readPoints(path);
+                View2D* pv2d;
+                pv2d = new View2D(pts);
+                _view.addView(pv2d, tr("2D"), &_2d);
                 return true;
             }
             return true;
