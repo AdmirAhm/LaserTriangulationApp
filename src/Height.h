@@ -71,18 +71,33 @@ void click_event(int event, int x, int y, int flags, void* params) {
 	if (event == cv::EVENT_LBUTTONDOWN) {
 		cv::Mat* matrice = (cv::Mat*)params;
 		auto rez = positionEstimation(x, y, matrice[0], matrice[1], matrice[2], matrice[3]);
-		std::cout << rez.x << "," << rez.y << "," << rez.z << std::endl;
+		//std::cout << rez.x << "," << rez.y << "," << rez.z << std::endl;
+		std::stringstream ss;
+		ss << rez.x << "," << rez.y << "," << rez.z;
+		std::string text;
+		ss >> text;
+		cv::putText(matrice[4], text, cv::Point(x, y), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 255), 2);
 	}
 }
 
 void height(std::string path, cv::Mat cameraMatrix, cv::Mat dist, cv::Mat R, cv::Mat t) {
 	cv::Mat slika = cv::imread(path);
+	cv::Mat slikamod = cv::imread(path);
 	cv::imshow("Slika", slika);
-	cv::Mat matrice[4];
+
+	cv::Mat matrice[5];
 	matrice[0] = cameraMatrix;
 	matrice[1] = dist;
 	matrice[2] = R;
 	matrice[3] = t;
+	matrice[4] = slikamod;
 	cv::setMouseCallback("Slika", click_event, matrice);
-	cv::waitKey(0);
+	while (1) {
+		cv::imshow("Slika", slikamod);
+		char c=cv::waitKey(1);
+		if (c == 'q') break;
+		if (c == 'e') slika.copyTo(slikamod);
+	}
+	cv::destroyWindow("Slika");
+
 }

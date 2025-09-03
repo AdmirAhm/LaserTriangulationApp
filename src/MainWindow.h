@@ -29,6 +29,7 @@ protected:
     gui::Image _laser;
     cv::Mat cameraMatrix;
     cv::Mat dist;
+    cv::Mat r, t;
 
 public:
     MainWindow()
@@ -57,7 +58,7 @@ protected:
             ViewCalib* pv;
             switch (actionID) {
             case 10:
-                pv = new ViewCalib(&cameraMatrix, &dist);
+                pv = new ViewCalib(&cameraMatrix, &dist, &r, &t);
                 _view.addView(pv, tr("Kalibracija"), &_target);
                 return true;
                 break;
@@ -82,6 +83,9 @@ protected:
             td::String pathp=pFD->getFileName();
             std::string path = pathp.c_str();
             if (path != "") {
+                cv::Mat R;
+                cv::Rodrigues(r, R);
+                height(path, cameraMatrix, dist, R, t);
                 return true;
             }
             return true;
