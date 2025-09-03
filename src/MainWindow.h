@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "Height.h"
 #include "FindLine.h"
+#include "LaserHeight.h"
 #include <gui/FileDialog.h>
 class MainWindow : public gui::Window
 {
@@ -71,6 +72,9 @@ protected:
             case 40:
                 gui::SelectFolderDialog::show(this, "FindLine", 40);
                 break;
+            case 50:
+                gui::SelectFolderDialog::show(this, "LaserHeight", 50);
+                break;
             }
         }
         return false;
@@ -96,6 +100,18 @@ protected:
             std::string path = pathp.c_str();
             if (path != "") {
                 findLine(path);
+                return true;
+            }
+            return true;
+        }
+        if (dlgID == 50)
+        {
+            td::String pathp = pFD->getFileName();
+            std::string path = pathp.c_str();
+            if (path != "") {
+                cv::Mat R;
+                cv::Rodrigues(r, R);
+                LaserHeight(path, cameraMatrix, dist, R, t);
                 return true;
             }
             return true;
