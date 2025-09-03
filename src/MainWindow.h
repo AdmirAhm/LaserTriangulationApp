@@ -34,7 +34,7 @@ protected:
     cv::Mat r, t;
 
 public:
-    MainWindow()
+    MainWindow(bool darkmode)
     : gui::Window(gui::Geometry(50, 50, 1200, 600))
     , _camera(":camera")
     , _2d(":2d")
@@ -152,7 +152,8 @@ protected:
                 auto pts = readPoints(path);
                 View2D* pv2d;
                 pv2d = new View2D(pts);
-                _view.addView(pv2d, tr("2D"), &_2d);
+                int a=_view.addView(pv2d, tr("2D"), &_2d);
+                _view.setNonRemovable(a);
                 return true;
             }
             return true;

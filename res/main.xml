@@ -21,4 +21,9 @@
 		<Res id="shVert" path=":shaders/First.vert"/>
 		<Res id="shFrag" path=":shaders/First.frag"/>
 	</Texts>
+	<FileNames>
+		<Res id="arial" path="other_bin/TestData/natGL/Fonts/Arial32.text"/>
+		<Res id="times" path="other_bin/TestData/natGL/Fonts/Times New Roman32.text"/>
+		<Res id="lucida" path="other_bin/TestData/natGL/Fonts/Lucida32.text"/>
+	</FileNames>
 </DevRes>

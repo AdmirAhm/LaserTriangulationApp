@@ -12,7 +12,7 @@ protected:
     
     gui::Window* createInitialWindow() override
     {
-        return new MainWindow();
+        return new MainWindow(isDarkMode());
     }
     
 public:
