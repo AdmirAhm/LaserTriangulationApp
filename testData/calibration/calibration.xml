@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Params>
+	<param id="f" fx="1311.69" fy="1321.62"/>
+	<param id="c" cx="535.501" cy="341.939"/>
+	<param id="dist" dist1="0.029204" dist2="-0.077313" dist3="-0.000324" dist4="-0.029219" dist5="-0.189864"/>
+	<param id="rvec" rvec1="0.849123" rvec2="2.31349" rvec3="-1.39903"/>
+	<param id="tvec" tvec1="12.8462" tvec2="-71.5612" tvec3="464.371"/>
+</Params>
