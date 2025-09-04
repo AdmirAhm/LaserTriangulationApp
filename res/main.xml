@@ -20,6 +20,8 @@
 		<!--- all from res folder -->
 		<Res id="shVert" path=":shaders/First.vert"/>
 		<Res id="shFrag" path=":shaders/First.frag"/>
+		<Res id="shVert3D" path=":shaders/First3D.vert"/>
+		<Res id="shFrag3D" path=":shaders/First3D.frag"/>
 	</Texts>
 	<FileNames>
 		<Res id="arial" path="other_bin/TestData/natGL/Fonts/Arial32.text"/>

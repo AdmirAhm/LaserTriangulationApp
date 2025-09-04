@@ -65,7 +65,7 @@ private:
 
 
         // Vertex data for a simple rectangle with colors
-        gui::gl::VertexType *vertices = new gui::gl::VertexType[5*_pts.size()];
+        float *vertices = new float[5*_pts.size()];
         auto a = 0.5f*getDistance(_pts[0], _pts[_pts.size() - 1]);
         for (int i = 0; i < _pts.size(); i++) {
             vertices[i * 5] = getDistance(_pts[0], _pts[i])/a-1.0f;

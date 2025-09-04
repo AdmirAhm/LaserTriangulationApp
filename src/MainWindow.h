@@ -1,7 +1,3 @@
-//
-//  Created by Izudin Dzafic on 28/07/2020.
-//  Copyright © 2020 IDz. All rights reserved.
-//
 #pragma once
 #include <gui/Window.h>
 #include "MenuBar.h"
@@ -15,6 +11,8 @@
 #include "LaserHeight.h"
 #include <gui/FileDialog.h>
 #include  "View2D.h";
+#include  "View3D.h";
+#include "Dialog3DSelect.h"
 class MainWindow : public gui::Window
 {
 private:
@@ -32,6 +30,7 @@ protected:
     cv::Mat cameraMatrix;
     cv::Mat dist;
     cv::Mat r, t;
+    double distance;
 
 public:
     MainWindow(bool darkmode)
@@ -52,6 +51,10 @@ public:
         setToolBar(_mainToolBar);
         _mainMenuBar.setAsMain(this);
         setCentralView(&_view);
+    }
+
+    void Open3D() {
+        gui::SelectFolderDialog::show(this, "LaserHeight", 70);
     }
 protected:
     bool onActionItem(gui::ActionItemDescriptor& aiDesc) override{
@@ -80,6 +83,11 @@ protected:
                 //pv2d = new View2D;
                 //_view.addView(pv2d, tr("2D"), &_2d);
                 break;
+            case 70:
+                Dialog3DSelect * dlg = new Dialog3DSelect(this, 1, &distance);
+                dlg->keepOnTopOfParent();
+                dlg->openModal([this](gui::Dialog::Button::ID id, gui::Dialog* pDlg) {if (id == gui::Dialog::Button::ID::OK) this->Open3D(); });
+                break;
             }
             return true;
         }
@@ -106,6 +114,7 @@ protected:
         }
         return pts;
     }
+
 
     bool onClick(gui::FileDialog* pFD, td::UINT4 dlgID) override
     {
@@ -153,6 +162,27 @@ protected:
                 View2D* pv2d;
                 pv2d = new View2D(pts);
                 int a=_view.addView(pv2d, tr("2D"), &_2d);
+                _view.setNonRemovable(a);
+                return true;
+            }
+            return true;
+        }
+
+        if (dlgID == 70)
+        {
+            td::String pathp = pFD->getFileName();
+            std::string path = pathp.c_str();
+            if (path != "") {
+                std::vector<std::vector<cv::Point3f>>pts;
+                for (const auto& entry : std::filesystem::directory_iterator(path.c_str())) {
+                    std::string pth = entry.path().string();
+                    auto ptsp = readPoints(pth);
+                    pts.push_back(ptsp);
+                }
+
+                View3D* pv3d;
+                pv3d = new View3D(distance, pts);
+                int a = _view.addView(pv3d, tr("3D"), &_3d);
                 _view.setNonRemovable(a);
                 return true;
             }
