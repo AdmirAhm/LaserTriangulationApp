@@ -8,48 +8,86 @@
 #include <fstream>
 #include <filesystem>
 
-void ThinSubiteration1(cv::Mat& pSrc, cv::Mat& pDst) {
-	int rows = pSrc.rows;
-	int cols = pSrc.cols;
+bool Step1(cv::Mat& pSrc, cv::Mat& pDst) {
+	bool t = false;
 	pSrc.copyTo(pDst);
-	for (int i = 1; i < rows - 1; i++) {
-		for (int j = 1; j < cols - 1; j++) {
+	for (int i = 1; i < pSrc.rows - 1; i++) {
+		for (int j = 1; j < pSrc.cols - 1; j++) {
 			if (pSrc.at<uchar>(i, j) > 0) {
-				/// get 8 neighbors
-				/// calculate C(p)
-				int n = (int)pSrc.at<uchar>(i, j);
-				int neighbor0 = (int)pSrc.at<uchar>(i - 1, j - 1) / 255;
-				int neighbor1 = (int)pSrc.at<uchar>(i - 1, j) / 255;
-				int neighbor2 = (int)pSrc.at<uchar>(i - 1, j + 1) / 255;
-				int neighbor3 = (int)pSrc.at<uchar>(i, j + 1) / 255;
-				int neighbor4 = (int)pSrc.at<uchar>(i + 1, j + 1) / 255;
-				int neighbor5 = (int)pSrc.at<uchar>(i + 1, j) / 255;
-				int neighbor6 = (int)pSrc.at<uchar>(i + 1, j - 1) / 255;
-				int neighbor7 = (int)pSrc.at<uchar>(i, j - 1) / 255;
-				int C = int(~neighbor1 & (neighbor2 | neighbor3)) +
-					int(~neighbor3 & (neighbor4 | neighbor5)) +
-					int(~neighbor5 & (neighbor6 | neighbor7)) +
-					int(~neighbor7 & (neighbor0 | neighbor1));
-				if (C == 1) {
-					/// calculate N
-					int N1 = int(neighbor0 | neighbor1) +
-						int(neighbor2 | neighbor3) +
-						int(neighbor4 | neighbor5) +
-						int(neighbor6 | neighbor7);
-					int N2 = int(neighbor1 | neighbor2) +
-						int(neighbor3 | neighbor4) +
-						int(neighbor5 | neighbor6) +
-						int(neighbor7 | neighbor0);
-					int N = std::min(N1, N2);
-					if ((N == 2) || (N == 3)) {
-						/// calculate criteria 3
-						int c3 = (neighbor1 | neighbor2 | ~neighbor4) & neighbor3;
-						if (c3 == 0) {
-							pDst.at<uchar>(i, j) = 0.0f;
-						}
-					}
+				int n1 = (int)pSrc.at<uchar>(i, j);
+				int n2 = (int)pSrc.at<uchar>(i - 1, j) / 255;
+				int n3 = (int)pSrc.at<uchar>(i - 1, j + 1) / 255;
+				int n4 = (int)pSrc.at<uchar>(i, j + 1) / 255;
+				int n5 = (int)pSrc.at<uchar>(i + 1, j + 1) / 255;
+				int n6 = (int)pSrc.at<uchar>(i + 1, j) / 255;
+				int n7 = (int)pSrc.at<uchar>(i + 1, j - 1) / 255;
+				int n8 = (int)pSrc.at<uchar>(i, j - 1) / 255;
+				int n9 = (int)pSrc.at<uchar>(i - 1, j - 1) / 255;
+
+				int A = (n2 < n3) +
+					(n3 < n4) +
+					(n4 < n5) +
+					(n5 < n6) +
+					(n6 < n7) +
+					(n7 < n8) +
+					(n8 < n9) +
+					(n9 < n2);
+				int B = (n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9);
+				if (A == 1 && B >= 2 && B <= 6 && (n2 < 1 || n4 < 1 || n6 < 1) && (n8 < 1 || n4 < 1 || n6 < 1)) {
+					pDst.at<uchar>(i, j) = 0;
+					t = true;
 				}
+
 			}
+		}
+	}
+	return t;
+}
+
+bool Step2(cv::Mat& pSrc, cv::Mat& pDst) {
+	bool t = false;
+	pSrc.copyTo(pDst);
+	for (int i = 1; i < pSrc.rows - 1; i++) {
+		for (int j = 1; j < pSrc.cols - 1; j++) {
+			if (pSrc.at<uchar>(i, j) > 0) {
+				int n1 = (int)pSrc.at<uchar>(i, j);
+				int n2 = (int)pSrc.at<uchar>(i - 1, j) / 255;
+				int n3 = (int)pSrc.at<uchar>(i - 1, j + 1) / 255;
+				int n4 = (int)pSrc.at<uchar>(i, j + 1) / 255;
+				int n5 = (int)pSrc.at<uchar>(i + 1, j + 1) / 255;
+				int n6 = (int)pSrc.at<uchar>(i + 1, j) / 255;
+				int n7 = (int)pSrc.at<uchar>(i + 1, j - 1) / 255;
+				int n8 = (int)pSrc.at<uchar>(i, j - 1) / 255;
+				int n9 = (int)pSrc.at<uchar>(i - 1, j - 1) / 255;
+
+				int A = (n2 < n3) +
+					(n3 < n4) +
+					(n4 < n5) +
+					(n5 < n6) +
+					(n6 < n7) +
+					(n7 < n8) +
+					(n8 < n9) +
+					(n9 < n2);
+				int B = (n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9);
+				if (A == 1 && B >= 2 && B <= 6 && (n2 < 1 || n4 < 1 || n8 < 1) && (n8 < 1 || n2 < 1 || n6 < 1)) {
+					pDst.at<uchar>(i, j) = 0;
+					t = true;
+				}
+
+			}
+		}
+	}
+	return t;
+}
+
+void ZhangSuen(cv::Mat& pSrc, cv::Mat& pDst) {
+	while (1) {
+		bool t1 = Step1(pSrc, pDst);
+		pDst.copyTo(pSrc);
+		bool t2 = Step2(pSrc, pDst);
+		pDst.copyTo(pSrc);
+		if (!t1 && !t2) {
+			return;
 		}
 	}
 }
@@ -87,7 +125,7 @@ void findLine(std::string path) {
 		}
 		i++;
 		for (int i = 0; i < 20; i++) {
-			ThinSubiteration1(green, green2);
+			ZhangSuen(green, green2);
 			green2.copyTo(green);
 		}
 		std::stringstream ss;
