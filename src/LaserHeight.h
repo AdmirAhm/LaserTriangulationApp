@@ -14,12 +14,13 @@ void LaserHeight(std::string path, cv::Mat cameraMatrix, cv::Mat dist, cv::Mat R
 	int ind = 1;
 	for (const auto& entry : std::filesystem::directory_iterator(path.c_str())) {
 		std::string s = entry.path().string();
+		std::string nm = entry.path().stem().string();
 		cv::Mat mask = cv::imread(s, cv::IMREAD_GRAYSCALE);
 		//cv::cvtColor(mask, mask, cv::COLOR_BGR2GRAY);
 		//cv::threshold(mask, mask, 127, 255, cv::THRESH_BINARY);
 		//cv::imshow("maska", mask);
 		std::stringstream ss;
-		ss << path << "/data" << ind <<".xml";
+		ss << path << "/data_" << nm <<".xml";
 		std::string pth;
 		ss >> pth;
 		xml::Writer w(pth);

@@ -99,6 +99,7 @@ void findLine(std::string path) {
 
 	for (const auto& entry : std::filesystem::directory_iterator(path.c_str())) {
 		std::string pth = entry.path().string();
+		std::string nm = entry.path().filename().string();
 		cv::Mat slika, slikaMod, green, green2;
 		slika = cv::imread(pth, cv::IMREAD_COLOR);
 		cv::cvtColor(slika, slikaMod, cv::COLOR_BGR2HSV);
@@ -129,7 +130,7 @@ void findLine(std::string path) {
 			green2.copyTo(green);
 		}
 		std::stringstream ss;
-		ss << path << "/maska" << i << ".jpg";
+		ss << path << "/m" << nm;
 		std::string imeslike;
 		ss >> imeslike;
 		cv::imwrite(imeslike, green);
