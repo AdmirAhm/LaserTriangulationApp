@@ -8,6 +8,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributions](#contributions)
+- [Screenshots](#screenshots)
   
 ---
 
@@ -47,6 +48,8 @@ Libraries used for the application include uEye library, OpenCV and OpenGL. Grap
 
 The application should be compatible with Windows, Linux and MacOS. Testing so far was done only on Windows devices. 
 
+---
+
 ## Usage
 The application consists of several tools which can be used as follows:
 
@@ -76,6 +79,14 @@ Line Height option extracts all the laser line points from images in a folder wh
 
 ### 2D and 3D
 2D and 3D options are used to see the points form an XML file (or a set of XML files) in a plane or space. In 2D mode you can use 'a' and 'd' to find the height of different points. If you want to move faster through points, hold down Ctrl. In 3D mode you can use 'w', 'a', 's', 'd', 'q' and 'e' to move through 3D space. You can also specify how far apart are different profiles of the object in mm.
+
+---
+
+## Screenshots
+![Alt Text](/images/2Dprikaz.jpg)
+![Alt Text](images/3Dprikaz.jpg)
+
+---
 
 ## Contributions
 ### Application development
