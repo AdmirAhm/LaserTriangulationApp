@@ -7,8 +7,8 @@
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributions](#contributions)
 - [Screenshots](#screenshots)
+- [Contributions](#contributions)
   
 ---
 
