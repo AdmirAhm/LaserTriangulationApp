@@ -4,10 +4,11 @@
 
 ---
 
-- [Description](#-description)
-- [Installation](#-installation)
-- [User Manual](#-user-manual)
-
+- [Description](#description)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributions](#contributions)
+  
 ---
 
 ##  Description
